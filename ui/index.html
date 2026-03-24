@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ERP Dashboard</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+
+    <style>
+        body {
+            background: url("images/bg.jpg") no-repeat center center/cover;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .overlay {
+            background: rgba(0, 0, 0, 0.75);
+            min-height: 100vh;
+            padding-bottom: 40px;
+        }
+
+        .navbar {
+            background-color: rgba(0, 0, 0, 0.9) !important;
+        }
+
+        .title {
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            border-radius: 15px;
+            transition: 0.3s;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            backdrop-filter: blur(8px);
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 10px 25px rgba(0,0,0,0.5);
+        }
+
+        .btn {
+            border-radius: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="overlay">
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark px-4">
+        <a class="navbar-brand" href="#">ERP System</a>
+    </nav>
+
+    <!-- TITLE -->
+    <div class="container title">
+        <h1>Inventory & Sales Dashboard</h1>
+        <p>Manage your business efficiently</p>
+    </div>
+
+    <!-- CARDS -->
+    <div class="container">
+        <div class="row text-center">
+
+            <!-- Manage Products -->
+            <div class="col-md-4 mb-4">
+                <div class="card p-4 shadow-lg">
+                    <h3>Manage Products</h3>
+                    <p>Add, update and delete products</p>
+                    <a href="manage-product.html" class="btn btn-primary">Go</a>
+                </div>
+            </div>
+
+            <!-- Orders -->
+            <div class="col-md-4 mb-4">
+                <div class="card p-4 shadow-lg">
+                    <h3>Orders</h3>
+                    <p>Track and manage orders</p>
+                    <a href="order.html" class="btn btn-success">Go</a>
+                </div>
+            </div>
+
+            <!-- Analytics -->
+            <div class="col-md-4 mb-4">
+                <div class="card p-4 shadow-lg">
+                    <h3>Analytics</h3>
+                    <p>View reports and insights</p>
+                    <a href="analytics.html" class="btn btn-warning">Open</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

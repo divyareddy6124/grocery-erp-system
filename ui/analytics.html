@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Dashboard</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            background: url("images/bg.jpg") no-repeat center/cover;
+        }
+
+        .overlay {
+            background: rgba(0,0,0,0.75);
+            min-height: 100vh;
+            padding: 30px;
+            color: white;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(8px);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="overlay">
+
+    <h2 class="mb-4">📊 Analytics Dashboard</h2>
+
+    <!-- SUMMARY CARDS -->
+    <div class="row mb-4">
+
+        <div class="col-md-4">
+            <div class="card">
+                <h4>Total Products</h4>
+                <h2 id="productCount">0</h2>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <h4>Total Orders</h4>
+                <h2 id="orderCount">0</h2>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <h4>Total Revenue</h4>
+                <h2 id="revenue">₹0</h2>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- CHARTS -->
+    <div class="row">
+
+        <div class="col-md-6">
+            <div class="card">
+                <h4>System Overview</h4>
+                <canvas id="mainChart"></canvas>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <h4>Orders Distribution</h4>
+                <canvas id="ordersChart"></canvas>
+            </div>
+        </div>
+
+    </div>
+
+    <br>
+
+    <a href="index.html" class="btn btn-light">⬅ Back</a>
+
+</div>
+
+<script>
+const API = "http://127.0.0.1:5000";
+
+// FETCH REAL DATA
+fetch(API + "/analytics")
+.then(res => res.json())
+.then(data => {
+
+    // Update summary cards
+    document.getElementById("productCount").innerText = data.products;
+    document.getElementById("orderCount").innerText = data.orders;
+    document.getElementById("revenue").innerText = "₹" + data.revenue;
+
+    // MAIN CHART
+    new Chart(document.getElementById("mainChart"), {
+        type: 'bar',
+        data: {
+            labels: ["Products", "Orders", "Revenue"],
+            datasets: [{
+                label: "System Data",
+                data: [data.products, data.orders, data.revenue],
+                backgroundColor: ["blue", "green", "orange"]
+            }]
+        }
+    });
+
+    // PIE CHART (Orders vs Products)
+    new Chart(document.getElementById("ordersChart"), {
+        type: 'pie',
+        data: {
+            labels: ["Products", "Orders"],
+            datasets: [{
+                data: [data.products, data.orders],
+                backgroundColor: ["purple", "yellow"]
+            }]
+        }
+    });
+
+});
+</script>
+
+</body>
+</html>

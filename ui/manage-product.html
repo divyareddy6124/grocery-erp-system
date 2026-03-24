@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manage Products</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+
+    <style>
+        body {
+            background: url("images/bg.jpg") no-repeat center/cover;
+        }
+
+        .container {
+            background: rgba(255,255,255,0.95);
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2 class="mb-4">Manage Products</h2>
+
+    <!-- ADD PRODUCT -->
+    <div class="card p-3 mb-4">
+        <h4>Add New Product</h4>
+
+        <input type="text" id="productName" class="form-control mb-2" placeholder="Product Name">
+
+        <select id="uom" class="form-control mb-2">
+            <option value="1">Kg</option>
+            <option value="2">Liter</option>
+            <option value="3">Piece</option>
+        </select>
+
+        <input type="number" id="price" class="form-control mb-2" placeholder="Price">
+
+        <button onclick="addProduct()" class="btn btn-primary">
+            Add Product
+        </button>
+    </div>
+
+    <!-- TABLE -->
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Unit</th>
+                <th>Price</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody id="productTableBody"></tbody>
+    </table>
+
+    <a href="index.html" class="btn btn-secondary">⬅ Back</a>
+
+</div>
+
+<script>
+const API = "http://127.0.0.1:5000";
+
+// LOAD PRODUCTS
+function loadProducts() {
+    fetch(API + "/getProducts")
+        .then(res => res.json())
+        .then(data => {
+            let table = document.getElementById("productTableBody");
+            table.innerHTML = "";
+
+            data.forEach(p => {
+                table.innerHTML += `
+                <tr>
+                    <td>${p.product_id}</td>
+                    <td>${p.name}</td>
+                    <td>${p.uom_name}</td>
+                    <td>${p.price_per_unit}</td>
+                    <td>
+                        <button onclick="deleteProduct(${p.product_id})" class="btn btn-danger btn-sm">
+                            Delete
+                        </button>
+                    </td>
+                </tr>`;
+            });
+        });
+}
+
+// ADD PRODUCT
+function addProduct() {
+    let name = document.getElementById("productName").value;
+    let uom = document.getElementById("uom").value;
+    let price = document.getElementById("price").value;
+
+    fetch(API + "/insertProduct", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            name: name,
+            uom_id: uom,
+            price: price
+        })
+    })
+    .then(res => res.json())
+    .then(() => {
+        loadProducts();
+        document.getElementById("productName").value = "";
+        document.getElementById("price").value = "";
+    });
+}
+
+// DELETE PRODUCT
+function deleteProduct(id) {
+    fetch(API + "/deleteProduct/" + id, {
+        method: "DELETE"
+    })
+    .then(() => loadProducts());
+}
+
+// AUTO LOAD
+window.onload = loadProducts;
+</script>
+
+</body>
+</html>

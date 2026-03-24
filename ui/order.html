@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Orders</title>
+<link rel="stylesheet" href="css/bootstrap.min.css">
+</head>
+
+<body style="background:url('images/bg.jpg') center/cover;">
+
+<div class="container mt-4 bg-white p-4 rounded">
+
+<h2>Create Order</h2>
+
+<select id="product" class="form-control mb-2"></select>
+<input id="qty" class="form-control mb-2" placeholder="Quantity">
+
+<button onclick="createOrder()" class="btn btn-success">Place Order</button>
+
+<hr>
+
+<h4>Orders</h4>
+<table class="table">
+<thead>
+<tr><th>ID</th><th>Product</th><th>Qty</th><th>Total</th></tr>
+</thead>
+<tbody id="orders"></tbody>
+</table>
+
+<a href="index.html">⬅ Back</a>
+
+</div>
+
+<script>
+const API="http://127.0.0.1:5000";
+
+// load products
+fetch(API+"/getProducts")
+.then(r=>r.json())
+.then(data=>{
+let options="";
+data.forEach(p=>{
+options+=`<option value="${p.product_id}">${p.name}</option>`;
+});
+document.getElementById("product").innerHTML=options;
+});
+
+// create order
+function createOrder(){
+fetch(API+"/createOrder",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({
+product_id:document.getElementById("product").value,
+quantity:document.getElementById("qty").value
+})
+}).then(()=>loadOrders());
+}
+
+// load orders
+function loadOrders(){
+fetch(API+"/getOrders")
+.then(r=>r.json())
+.then(data=>{
+let html="";
+data.forEach(o=>{
+html+=`<tr>
+<td>${o.order_id}</td>
+<td>${o.name}</td>
+<td>${o.quantity}</td>
+<td>${o.total}</td>
+</tr>`;
+});
+document.getElementById("orders").innerHTML=html;
+});
+}
+
+loadOrders();
+</script>
+
+</body>
+</html>
+<script src="js/custom/order.js"></script>
